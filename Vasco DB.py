@@ -21,12 +21,12 @@ vasco
 
 
 #this drop some rows with useless data
-vasco = vasco.drop(labels = [36, 5, 18, 29])
+vasco.drop(labels = [36, 5, 18, 29], inplace = True)
 vasco = vasco.reset_index()
 
 
 #other with no avaliable data
-vasco = vasco.drop(columns = ['Goalkeeper.3', 'index'])
+vasco.drop(columns = ['Goalkeeper.3', 'index'], inplace = True)
 
 
 
