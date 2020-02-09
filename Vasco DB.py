@@ -1,19 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[216]:
-
 
 import pandas as pd
-import numpy as np
-import seaborn as sns
-from datetime import date
 from datetime import datetime
 import sqlite3 as sql
 print('tá ok!!')
-
-
-# In[217]:
 
 
 list_test = pd.read_html('https://www.worldfootball.net/teams/vasco-da-gama/2020/2/')
@@ -21,10 +10,7 @@ vasco = pd.DataFrame(list_test[1])
 vasco['Goalkeeper'][0] = 'Goalkeeper'
 
 
-# In[218]:
-
-
-
+#the table is upload a dataframe with some issues, like a empty column this code fix the 'Position' of players
 n = 0
 for i in vasco['Goalkeeper']:
     if pd.isnull(vasco['Goalkeeper'][n]):
@@ -33,33 +19,24 @@ for i in vasco['Goalkeeper']:
 vasco
 
 
-# In[219]:
 
-
+#this drop some rows with useless data
 vasco = vasco.drop(labels = [36, 5, 18, 29])
 vasco = vasco.reset_index()
 
 
-# In[220]:
-
-
+#other with no avaliable data
 vasco = vasco.drop(columns = ['Goalkeeper.3', 'index'])
 
 
-# In[221]:
 
-
+#changing the columns' name to the right name
 vasco.columns = ['Position','Number', 'Name', 'Nationality', 'Birth Date', 'Age']
 
-
-# In[222]:
-
-
-#d = datetime.strptime((vasco['Birth Date'][35]), '%d/%m/%Y').year
 D = datetime.today().year
 n = 0
 
-#vasco['Age'][0] = 1
+#calculing the age 
 for i in vasco.index:
     d = datetime.strptime((vasco['Birth Date'][n]), '%d/%m/%Y').year
     p = D - d
@@ -67,26 +44,13 @@ for i in vasco.index:
     n = n + 1
 
 
-# In[223]:
 
-
-vasco
-
-
-# In[ ]:
-
-
-
-
-
-# In[224]:
-
-
+#create a database file
 vascodb = sql.connect('vasco_crvg.db')
 c = vascodb.cursor()
 
 
-
+#testing if the table already exist, if it's true then will overwrite it
 c.execute('DROP TABLE IF EXISTS players')
 
 
@@ -96,7 +60,7 @@ vascodb.commit()
 
 
 vasco.to_sql('players', vascodb, if_exists='replace', index = False)
- 
+#this line show the database file 
 """c.execute('''  
 SELECT * FROM PLAYERS
           ''')
@@ -105,25 +69,6 @@ for row in c.fetchall():
     print (row)"""
 
 
-# In[ ]:
-
-
-
-
-
-# In[242]:
-
-
-#sns.distplot(a =vasco['Age'][0:33] )
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
